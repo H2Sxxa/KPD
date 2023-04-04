@@ -1,0 +1,7 @@
+global_set:
+  ques: ''
+intro:
+  exit: exit
+  ques: Chose it
+  search: search
+  setting: setting

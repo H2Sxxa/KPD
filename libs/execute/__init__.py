@@ -1,6 +1,6 @@
-from . import tui,instance
+from . import impl, tui
 
 __all__=[
     "tui",
-    "instance"
+    "impl"
 ]
