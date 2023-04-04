@@ -14,10 +14,16 @@ def geti18n(filepath):
 class I18n_Setting:
     @ConfigManager.Cate()
     class global_set:
-        ques=""
+        ques="Choose a choice and return?"
+        exit="Confirm to exit"
+        backto="Return"
+        as_yes="Yes"
+        as_no="No"
+    @ConfigManager.Cate()
+    class setting:
+        language="Language"
     @ConfigManager.Cate()
     class intro:
-        ques="Chose it"
-        search="search"
-        setting="setting"
-        exit="exit"
+        search="Search"
+        setting="Setting"
+        exit="Exit"

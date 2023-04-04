@@ -6,10 +6,6 @@ from Remilia.utils.cli.prompts import DT,RT
 from Remilia.lite.LiteLog import Logger
 
 
-class Form(ABC):
-    @abstractmethod
-    async def do_render(self) -> Union[DT, RT]:pass
-    def form_name(self) -> str:return self.__class__.__name__
 
 class TUI_Builder:
     def __init__(self,loop:AbstractEventLoop,logger:Logger) -> None:
@@ -17,7 +13,12 @@ class TUI_Builder:
         self.loop=loop
         logger.tui("tui start successfully")
 
-    async def render(self,form:Form):
+    async def render(self,form:"Form"):
         self.logger.tui("render",form.form_name())
-        result=await form.do_render()
-        await self.render(result.data)
+        return await form.do_render(self)
+            
+            
+class Form(ABC):
+    @abstractmethod
+    async def do_render(self,builder:TUI_Builder) -> Union[DT, RT]:pass
+    def form_name(self) -> str:return self.__class__.__name__

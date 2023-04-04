@@ -1,7 +1,12 @@
 global_set:
-  ques: ''
+  as_no: 'No'
+  as_yes: 'Yes'
+  backto: Return
+  exit: Confirm to exit
+  ques: Choose a choice and return?
 intro:
-  exit: exit
-  ques: Chose it
-  search: search
-  setting: setting
+  exit: Exit
+  search: Search
+  setting: Setting
+setting:
+  language: Language

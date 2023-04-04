@@ -8,11 +8,12 @@ MakeAsync()
 
 @event.TriggerEvent(event.BoostEvent)
 async def main(loop:asyncio.AbstractEventLoop,logger:Logger):
+    logger.recorder.subscribePath("./Data/log/latest.log")
+    logger.addPrintType("tui",4)
     logger.info("Boost Application in ASYNC!")
     while True:
         builder=tui.TUI_Builder(loop,logger)
-        await builder.render(impl.Intro
-                             ())
+        await builder.render(impl.Intro())
         
 if __name__ == "__main__":
     loop=asyncio.get_event_loop()
