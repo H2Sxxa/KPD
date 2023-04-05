@@ -1,7 +1,6 @@
 from abc import ABC,abstractmethod
 from asyncio import AbstractEventLoop
 from typing import Union
-from Remilia.utils.cli import prompts
 from Remilia.utils.cli.prompts import DT,RT
 from Remilia.lite.LiteLog import Logger
 

@@ -2,7 +2,8 @@ from Remilia.lite.v2 import ConfigManager
 def getPath(filepath):
     return "Data/" + filepath
 
-@ConfigManager.Config(ConfigManager.ConfigSetting(model=ConfigManager.YamlFile,path=getPath("app.yml"),regenerate=True))
+App_Conf=ConfigManager.Config(ConfigManager.ConfigSetting(model=ConfigManager.YamlFile,path=getPath("app.yml"),regenerate=True))
+@App_Conf
 class App_Setting:
     @ConfigManager.Cate()
     class language:
@@ -10,7 +11,9 @@ class App_Setting:
         
 def geti18n(filepath):
     return getPath("i18n/" + filepath)
-@ConfigManager.Config(ConfigManager.ConfigSetting(model=ConfigManager.YamlFile,path=geti18n(App_Setting.language.lang),regenerate=True))
+
+I18n_Conf=ConfigManager.Config(ConfigManager.ConfigSetting(model=ConfigManager.YamlFile,path=geti18n(App_Setting.language.lang),regenerate=True))
+@I18n_Conf
 class I18n_Setting:
     @ConfigManager.Cate()
     class global_set:

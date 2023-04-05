@@ -1,7 +1,8 @@
 from typing import Union
 from os import listdir
-from .tui import Form,prompts,TUI_Builder,DT,RT
-from ..yml.app import I18n_Setting,getPath,App_Setting
+from Remilia.utils.cli import prompts
+from .tui import Form,TUI_Builder,DT,RT
+from ..yml.app import I18n_Setting,getPath,App_Setting,App_Conf
 from ..utils.builder import ChoiceBuilder
 
 
@@ -53,12 +54,9 @@ class Lanugage(CanBackForm):
             question=I18n_Setting.global_set.ques,
             choices=ChoiceBuilder.fromlist(listdir(getPath("i18n")))
         ).prompt()
-        setattr(App_Setting.language,"lang",ce.data)
-        print(App_Setting.language)
-        App_Setting.__config__.push(App_Setting)
+        App_Setting.language._modify("lang",ce.data)
+        App_Conf._push(App_Setting)
         return await builder.render(self.backto)
-
-
 
 class Exit(CanBackForm):
     async def do_render(self, builder: TUI_Builder) -> Union[DT, RT]:
