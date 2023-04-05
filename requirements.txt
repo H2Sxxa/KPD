@@ -1,0 +1,5 @@
+Remilia==1.0.3
+prompt-toolkit
+aiohttp
+lxml
+pyperclip

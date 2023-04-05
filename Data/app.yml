@@ -1,2 +1,4 @@
+clean_cache: false
 language:
   lang: en_us.yml
+max_cotents: 10

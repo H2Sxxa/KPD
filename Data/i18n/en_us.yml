@@ -8,5 +8,10 @@ intro:
   exit: Exit
   search: Search
   setting: Setting
+search:
+  from_clip: (clip)
+  plain_search: Plain Search
+  ques: Input Keyword
+  regex_search: Regex Search
 setting:
   language: Language
