@@ -1,5 +1,6 @@
+from abc import abstractmethod
 import re,pyperclip
-from typing import Union
+from typing import List, Union
 from os import listdir
 from Remilia.utils.cli import prompts
 from Remilia.base.files import File
@@ -21,13 +22,27 @@ class SearchForm(Form):
         self.backto=backto
         self.refer=refer
         self.clip=clip
-        
-
+class SettingForm(Form):
+    def setBack(self,obj):
+        self.backto=obj
+        return self
+class ALTCForm(SettingForm):
+    def __init__(self,name:str) -> None:
+        super().__init__()
+        self.name=name
+    def do_overwrite(self,obj):
+        App_Conf._modify_push(self.name,obj)
+    
 class YoN(Form):
     def __init__(self,ques:str=I18n_Setting.global_set.ques) -> None:
         super().__init__()
         self.ques=ques
     async def do_render(self,_:TUI_Builder) -> Union[DT, RT]:
+        '''
+        cp=await prompts.ConfirmPrompt(
+            question=self.ques,
+        ).prompt()
+        '''
         ce=await prompts.ListPrompt(
             question=self.ques,
             choices=[
@@ -67,6 +82,12 @@ class Search(CanBackForm):
             ]
         ).prompt()
         return await builder.render(ce.data)
+
+class Content(CanBackForm):
+    async def do_render(self, builder: TUI_Builder) -> Union[DT, RT]:
+        ce=prompts.ListPrompt()
+        return await super().do_render(builder)
+
 class Creator(CanBackForm):
     def __init__(self, backto: Form,result:list) -> None:
         super().__init__(backto)
@@ -143,23 +164,50 @@ class Setting(CanBackForm):
         ce=await prompts.ListPrompt(
             question=I18n_Setting.global_set.ques,
             choices=[
-                ChoiceBuilder.fromdata(I18n_Setting.setting.language,Lanugage(self)),
+                ChoiceBuilder.fromdata(I18n_Setting.setting.language,Language(self)),
+                ChoiceBuilder.fromdata(I18n_Setting.setting.app.name,SubSettingPage(self).set_choice([
+                        ChoiceBuilder.fromdata(I18n_Setting.setting.app.clean_cache,BoolSetting("clean_cache")),
+                        ChoiceBuilder.fromdata(I18n_Setting.setting.app.sort_creator,BoolSetting("sort_creator"))
+                        ]
+                    )
+                                       ),
                 ChoiceBuilder.fromdata(I18n_Setting.global_set.backto,self.backto)
             ]
         ).prompt()
         return await builder.render(ce.data)
-
-class Lanugage(CanBackForm):
+class SubSettingPage(CanBackForm):
+    choices=[]
+    def set_choice(self,choices:List[prompts.Choice]):
+        self.choices=choices
+        self.choices.append(ChoiceBuilder.fromdata(I18n_Setting.global_set.backto,self.backto))
+        for cs in self.choices:
+            if isinstance(cs.data,SettingForm):
+                cs.data.setBack(self)
+        return self
+    async def do_render(self, builder: TUI_Builder) -> Union[DT, RT]:
+        ce=await prompts.ListPrompt(
+            question=I18n_Setting.global_set.ques,
+            choices=self.choices
+        ).prompt()
+        
+        return await builder.render(ce.data)
+    
+class Language(CanBackForm):
     async def do_render(self, builder: TUI_Builder) -> Union[DT, RT]:
         ce=await prompts.ListPrompt(
             question=I18n_Setting.global_set.ques,
             choices=ChoiceBuilder.fromlist(listdir(getPath("i18n")))
         ).prompt()
-        App_Setting.language._modify("lang",ce.data)
-        App_Conf._push(App_Setting)
+        App_Conf._modify_push("lang",ce.data)
         I18n_Conf._setting.replace_ins(geti18n(ce.data))
         I18n_Conf._get(I18n_Conf._obj)
         return await builder.render(self.backto)
+
+class BoolSetting(ALTCForm):
+    async def do_render(self, builder: TUI_Builder) -> Union[DT, RT]:
+        self.do_overwrite(await builder.render(YoN()))
+        return await builder.render(self.backto)
+
 
 class Exit(CanBackForm):
     async def do_render(self, builder: TUI_Builder) -> Union[DT, RT]:

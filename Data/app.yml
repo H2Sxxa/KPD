@@ -1,5 +1,4 @@
 clean_cache: false
-language:
-  lang: en_us.yml
+lang: zh_cn.yml
 max_cotents: 10
 sort_creator: true

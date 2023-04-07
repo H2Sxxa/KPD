@@ -14,4 +14,8 @@ search:
   ques: Input Keyword
   regex_search: Regex Search
 setting:
+  app:
+    clean_cache: Clean cache
+    name: APP Setting
+    sort_creator: Sort creators
   language: Language

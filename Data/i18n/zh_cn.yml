@@ -14,4 +14,8 @@ search:
   ques: "\u8F93\u5165\u5173\u952E\u8BCD"
   regex_search: "\u6B63\u5219\u641C\u7D22"
 setting:
+  app:
+    clean_cache: "\u6E05\u9664\u7F13\u5B58"
+    name: "\u5E94\u7528\u8BBE\u5B9A"
+    sort_creator: "\u6574\u7406\u521B\u4F5C\u8005"
   language: "\u8BED\u8A00"

@@ -18,12 +18,10 @@ class App_Setting:
     clean_cache=False
     max_cotents=10
     sort_creator=True
-    @ConfigManager.Cate()
-    class language:
-        lang="en_us.yml"
+    lang="en_us.yml"
         
 
-I18n_Conf=ConfigManager.Config(ConfigManager.ConfigSetting(model=ConfigManager.YamlFile,path=geti18n(App_Setting.language.lang),regenerate=True))
+I18n_Conf=ConfigManager.Config(ConfigManager.ConfigSetting(model=ConfigManager.YamlFile,path=geti18n(App_Setting.lang),regenerate=True))
 @I18n_Conf
 class I18n_Setting:
     @ConfigManager.Cate()
@@ -41,6 +39,11 @@ class I18n_Setting:
         from_clip="(clip)"
     @ConfigManager.Cate()
     class setting:
+        @ConfigManager.Cate()
+        class app:
+            name="APP Setting"
+            clean_cache="Clean cache"
+            sort_creator="Sort creators"
         language="Language"
     @ConfigManager.Cate()
     class intro:
