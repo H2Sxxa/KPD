@@ -17,6 +17,7 @@ App_Conf=ConfigManager.Config(ConfigManager.ConfigSetting(model=ConfigManager.Ya
 class App_Setting:
     clean_cache=False
     max_cotents=10
+    sort_creator=True
     @ConfigManager.Cate()
     class language:
         lang="en_us.yml"

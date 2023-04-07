@@ -2,10 +2,11 @@ import re,pyperclip
 from typing import Union
 from os import listdir
 from Remilia.utils.cli import prompts
+from Remilia.base.files import File
 
 from libs.apis.kemono import KemonoClient
 from .tui import Form,TUI_Builder,DT,RT
-from ..yml.app import I18n_Setting,getPath,App_Setting,App_Conf
+from ..yml.app import I18n_Setting,getPath,App_Setting,App_Conf,I18n_Conf,geti18n
 from ..utils.builder import ChoiceBuilder
 
 
@@ -111,6 +112,7 @@ class PlainSearch(SearchForm):
             if keyword in creator["name"]:
                 builder.logger.info("Get %s" % creator["name"])
                 result.append(creator)
+        if App_Setting.sort_creator:result.sort(key=lambda x:x["name"])
         if len(result) == 0:
             builder.logger.info("No Such Creator!")
             return await builder.render(self.backto)
@@ -130,6 +132,7 @@ class RegexSearch(SearchForm):
             if re.search(keyword,creator["name"]):
                 builder.logger.info("Get %s" % creator["name"])
                 result.append(creator)
+        if App_Setting.sort_creator:result.sort(key=lambda x:x["name"])
         if len(result) == 0:
             builder.logger.info("No Such Creator!")
             return await builder.render(self.backto)
@@ -154,6 +157,8 @@ class Lanugage(CanBackForm):
         ).prompt()
         App_Setting.language._modify("lang",ce.data)
         App_Conf._push(App_Setting)
+        I18n_Conf._setting.replace_ins(geti18n(ce.data))
+        I18n_Conf._get(I18n_Conf._obj)
         return await builder.render(self.backto)
 
 class Exit(CanBackForm):
