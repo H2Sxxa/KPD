@@ -1,9 +1,12 @@
 from aiohttp import ClientSession
 from Remilia.lite.LiteResource import File
 from Remilia.lite.utils import typedet
+from Remilia.lite.v2.InstanceManager import Globals_Instance
 from json import loads,dumps
 from lxml.html import fromstring
 from base64 import b64encode
+
+from libs.base.const import LOGGER_NAME
 from ..yml.app import getCache
 
 class KemonoClient:
@@ -26,8 +29,9 @@ class KemonoClient:
     
     async def fetch_content(self,url):
         contents=File(getCache("content/%s.json"%b64encode(url.encode('utf-8')).decode('utf-8')))
+        
         if contents.isexist:
-            print("pick up cache")
+            Globals_Instance.get(LOGGER_NAME).info("pick up cache")
             return loads(contents.text)
         results=await self._handle_html(url)
         contents.write("w",dumps(results))
@@ -39,6 +43,7 @@ class KemonoClient:
                 return await rep.text()
     
     async def _handle_html(self,url):
+        logger=Globals_Instance.get(LOGGER_NAME)
         seletor=fromstring(await self._fetch_html(url))
         result=[]
         suburl=[]
@@ -51,18 +56,18 @@ class KemonoClient:
                 max_pages=rpgs
         except:
             max_pages=1
-        print("Total Page %s"%rpgs)
+        logger.info("Total Page %s"%max_pages)
         for i in range(0,max_pages):
             if i==0:
                 pass
             else:
                 suburl.append("%s?o=%s"%(url,i*50))
                 
-        print("Handle Page 1")
+        logger.info("Handle Page 1")
         result.extend(await self._handle_seletor(seletor))
         for url in suburl:
             index=suburl.index(url)+2
-            print("Handle Page %s"%index)
+            logger.info("Handle Page %s"%index)
             result.extend(await self._handle_seletor(fromstring(await self._fetch_html(url))))
         return result
     

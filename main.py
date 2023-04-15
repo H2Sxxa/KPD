@@ -2,8 +2,10 @@ import asyncio
 from shutil import rmtree
 from Remilia.lite.LiteLog import Logger,DefaultStyle,PrinterStyle,Fore
 from Remilia.lite.v2.DictoryTreeBuilder import DictroyTree,Node
+from Remilia.lite.v2.InstanceManager import Globals_Instance
 
 from libs.base import event
+from libs.base.const import LOGGER_NAME
 from libs.execute import impl, tui
 from libs.yml.app import App_Setting
 
@@ -35,5 +37,6 @@ async def main(loop:asyncio.AbstractEventLoop,logger:Logger):
         
 if __name__ == "__main__":
     logger=Logger(__name__,DefaultStyle.default_LogStyle1)
+    Globals_Instance.add(LOGGER_NAME,logger)
     loop=asyncio.get_event_loop()
     loop.run_until_complete(main(loop,logger))

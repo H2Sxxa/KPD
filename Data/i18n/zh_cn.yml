@@ -1,0 +1,21 @@
+global_set:
+  as_no: "\u5426"
+  as_yes: "\u662F"
+  backto: "\u8FD4\u56DE"
+  exit: "\u786E\u8BA4\u4EE5\u9000\u51FA"
+  ques: "\u9009\u62E9\u4E00\u4E2A\u9009\u9879\u4EE5\u7EE7\u7EED\uFF1F"
+intro:
+  exit: "\u9000\u51FA"
+  search: "\u641C\u7D22"
+  setting: "\u8BBE\u7F6E"
+search:
+  from_clip: "(\u526A\u8D34\u677F)"
+  plain_search: "\u666E\u901A\u641C\u7D22"
+  ques: "\u8F93\u5165\u5173\u952E\u8BCD"
+  regex_search: "\u6B63\u5219\u641C\u7D22"
+setting:
+  app:
+    clean_cache: "\u6E05\u9664\u7F13\u5B58"
+    name: "\u5E94\u7528\u8BBE\u5B9A"
+    sort_creator: "\u6574\u7406\u521B\u4F5C\u8005"
+  language: "\u8BED\u8A00"
