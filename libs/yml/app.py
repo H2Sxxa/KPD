@@ -19,7 +19,15 @@ class App_Setting:
     max_cotents=10
     sort_creator=True
     lang="en_us.yml"
-        
+    @ConfigManager.Cate()
+    class aria:
+        log_path="./Data/log/aria2c.log"
+        binary="./Data/binary/aria2c.exe"
+        args=["--enable-rpc"]
+        host="http://localhost"
+        port="6800"
+        secret=""
+        timeout=60.0
 
 I18n_Conf=ConfigManager.Config(ConfigManager.ConfigSetting(model=ConfigManager.YamlFile,path=geti18n(App_Setting.lang),regenerate=True))
 @I18n_Conf
@@ -33,7 +41,8 @@ class I18n_Setting:
         as_no="No"
     @ConfigManager.Cate()
     class search:
-        ques="Input Keyword:"
+        ques="Type Keyword:"
+        warn_empty="Keyword is empty,do you want to continue?"
         plain_search="Plain Search"
         regex_search="Regex Search"
         from_clip="(clip)"

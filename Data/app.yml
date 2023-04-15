@@ -1,4 +1,13 @@
+aria:
+  args:
+  - --enable-rpc
+  binary: ./Data/binary/aria2c.exe
+  host: http://localhost
+  log_path: ./Data/log/aria2c.log
+  port: '6800'
+  secret: ''
+  timeout: 60.0
 clean_cache: false
-lang: zh_cn.yml
+lang: en_us.yml
 max_cotents: 10
-sort_creator: true
+sort_creator: false

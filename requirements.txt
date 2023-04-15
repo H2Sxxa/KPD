@@ -1,5 +1,6 @@
-Remilia==1.0.3
-prompt-toolkit
+Remilia==1.1.3
+aria2p[tui]
+noneprompt
 aiohttp
 lxml
 pyperclip

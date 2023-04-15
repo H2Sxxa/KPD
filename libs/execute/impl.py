@@ -1,7 +1,7 @@
 from abc import abstractmethod
 import re,pyperclip
 from typing import List, Union
-from os import listdir
+from os import listdir,_exit
 from Remilia.utils.cli import prompts
 from Remilia.base.files import File
 
@@ -22,6 +22,19 @@ class SearchForm(Form):
         self.backto=backto
         self.refer=refer
         self.clip=clip
+        
+    async def get_keyword(self,builder:TUI_Builder) -> str:
+        if self.clip:
+            keyword=pyperclip.paste()
+        else:
+            keyword=await prompts.InputPrompt(
+                question=I18n_Setting.search.ques
+                ).prompt_async()
+        if keyword == "":
+            if not await builder.render(YoN(I18n_Setting.search.warn_empty)):
+                await builder.render(self)
+        return keyword
+    
 class SettingForm(Form):
     def setBack(self,obj):
         self.backto=obj
@@ -84,8 +97,18 @@ class Search(CanBackForm):
         return await builder.render(ce.data)
 
 class Content(CanBackForm):
+    def __init__(self, backto: Form,url:str) -> None:
+        super().__init__(backto)
+        self.url=url
+    async def getChoices(self):
+        
+        
+        return
     async def do_render(self, builder: TUI_Builder) -> Union[DT, RT]:
-        ce=prompts.ListPrompt()
+        ce=prompts.ListPrompt(
+            question=I18n_Setting.global_set.ques,
+            choices=await self.getChoices()
+        )
         return await super().do_render(builder)
 
 class Creator(CanBackForm):
@@ -121,13 +144,7 @@ class PlainSearch(SearchForm):
     async def do_render(self, builder: TUI_Builder) -> Union[DT, RT]:
         result=[]
         
-        if self.clip:
-            keyword=pyperclip.paste()
-        else:
-            keyword=await prompts.InputPrompt(
-                question=I18n_Setting.search.ques
-                ).prompt_async()
-            
+        keyword=await self.get_keyword(builder)
         
         for creator in self.refer:
             if keyword in creator["name"]:
@@ -142,12 +159,8 @@ class PlainSearch(SearchForm):
 class RegexSearch(SearchForm):
     async def do_render(self, builder: TUI_Builder) -> Union[DT, RT]:
         result=[]
-        if self.clip:
-            keyword=pyperclip.paste()
-        else:
-            keyword=await prompts.InputPrompt(
-                question=I18n_Setting.search.ques
-                ).prompt_async()
+        
+        keyword=await self.get_keyword(builder)
             
         for creator in self.refer:
             if re.search(keyword,creator["name"]):
@@ -188,7 +201,7 @@ class SubSettingPage(CanBackForm):
         ce=await prompts.ListPrompt(
             question=I18n_Setting.global_set.ques,
             choices=self.choices
-        ).prompt()
+        ).prompt_async()
         
         return await builder.render(ce.data)
     
@@ -212,6 +225,6 @@ class BoolSetting(ALTCForm):
 class Exit(CanBackForm):
     async def do_render(self, builder: TUI_Builder) -> Union[DT, RT]:
         if await builder.render(YoN(I18n_Setting.global_set.exit)):
-            exit()
+            _exit(0)
         else:
             return await builder.render(self.backto)
