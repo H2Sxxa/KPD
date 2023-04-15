@@ -1,16 +1,14 @@
 from Remilia.lite.v2 import ConfigManager
-from Remilia.lite.LiteLog import Logger
 
-def getPath(filepath):
+
+def getPath(filepath=""):
     return "Data/" + filepath
-def geti18n(filepath):
+def geti18n(filepath=""):
     return getPath("i18n/" + filepath)
-def getCache(filepath):
+def getCache(filepath=""):
     return getPath("cache/" + filepath)
-def getLog(filepath):
+def getLog(filepath=""):
     return getPath("log/" + filepath)
-
-MAIN_LOGGER:Logger=None
 
 App_Conf=ConfigManager.Config(ConfigManager.ConfigSetting(model=ConfigManager.YamlFile,path=getPath("app.yml"),regenerate=True))
 @App_Conf
@@ -22,8 +20,7 @@ class App_Setting:
     @ConfigManager.Cate()
     class aria:
         log_path="./Data/log/aria2c.log"
-        binary="./Data/binary/aria2c.exe"
-        args=["--enable-rpc"]
+        args=["./Data/binary/aria2c","--enable-rpc"]
         host="http://localhost"
         port="6800"
         secret=""
@@ -32,6 +29,11 @@ class App_Setting:
 I18n_Conf=ConfigManager.Config(ConfigManager.ConfigSetting(model=ConfigManager.YamlFile,path=geti18n(App_Setting.lang),regenerate=True))
 @I18n_Conf
 class I18n_Setting:
+    @ConfigManager.Cate()
+    class download_status:
+        add_uri="Add Uri"
+        type_uri="Type Uri"
+        ques="Download Status"
     @ConfigManager.Cate()
     class global_set:
         ques="Choose a choice and return?"
@@ -56,6 +58,7 @@ class I18n_Setting:
         language="Language"
     @ConfigManager.Cate()
     class intro:
+        download="Download"
         search="Search"
         setting="Setting"
         exit="Exit"

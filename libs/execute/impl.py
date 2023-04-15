@@ -4,12 +4,13 @@ from typing import List, Union
 from os import listdir,_exit
 from Remilia.utils.cli import prompts
 from Remilia.base.files import File
+from colorama import Fore
 
-from libs.apis.kemono import KemonoClient
 from .tui import Form,TUI_Builder,DT,RT
-from ..yml.app import I18n_Setting,getPath,App_Setting,App_Conf,I18n_Conf,geti18n
+from ..apis.kemono import KemonoClient
+from ..utils.instance import getAriaAPI
 from ..utils.builder import ChoiceBuilder
-
+from ..yml.app import I18n_Setting,getPath,App_Setting,App_Conf,I18n_Conf,geti18n
 
 class CanBackForm(Form):
     def __init__(self,backto:Form) -> None:
@@ -71,6 +72,7 @@ class Intro(Form):
             question=I18n_Setting.global_set.ques,
             choices=[
                 ChoiceBuilder.fromdata(I18n_Setting.intro.search,Search(self)),
+                ChoiceBuilder.fromdata(I18n_Setting.intro.download,DownloadStatus(self)),
                 ChoiceBuilder.fromdata(I18n_Setting.intro.setting,Setting(self)),
                 ChoiceBuilder.fromdata(I18n_Setting.intro.exit,Exit(self)),
             ]
@@ -95,7 +97,27 @@ class Search(CanBackForm):
             ]
         ).prompt_async()
         return await builder.render(ce.data)
-
+class DownloadStatus(CanBackForm):
+    async def do_render(self, builder: TUI_Builder) -> Union[DT, RT]:
+        lines=ChoiceBuilder.fromlist(getAriaAPI().get_downloads(),lambda download:download.name +" | "+download.progress_string()+" ["+download.download_speed_string()+"]",lambda _:DownloadStatus(self.backto))
+        lines.append(ChoiceBuilder.fromdata(I18n_Setting.download_status.add_uri,TypeUri(self.backto)))
+        lines.append(ChoiceBuilder.fromdata(I18n_Setting.global_set.backto,self.backto))
+        le=await prompts.ListPrompt(
+            question=I18n_Setting.download_status.ques,
+            choices=lines
+        ).prompt_async()
+        return await builder.render(le.data)
+    
+class TypeUri(CanBackForm):
+    async def do_render(self, builder: TUI_Builder) -> Union[DT, RT]:
+        uri=await prompts.InputPrompt(
+            question=I18n_Setting.download_status.type_uri
+        ).prompt_async()
+        try:
+            getAriaAPI().add(uri)
+        except Exception as e:
+            builder.logger.error(e)
+        return await builder.render(DownloadStatus(self.backto))
 class Content(CanBackForm):
     def __init__(self, backto: Form,url:str) -> None:
         super().__init__(backto)

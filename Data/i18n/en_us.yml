@@ -1,3 +1,7 @@
+download_status:
+  add_uri: Add Uri
+  ques: Download Status
+  type_uri: Type Uri
 global_set:
   as_no: 'No'
   as_yes: 'Yes'
@@ -5,6 +9,7 @@ global_set:
   exit: Confirm to exit
   ques: Choose a choice and return?
 intro:
+  download: Download
   exit: Exit
   search: Search
   setting: Setting
@@ -13,6 +18,7 @@ search:
   plain_search: Plain Search
   ques: Input Keyword
   regex_search: Regex Search
+  warn_empty: Keyword is empty,do you want to continue?
 setting:
   app:
     clean_cache: Clean cache

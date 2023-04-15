@@ -1,3 +1,7 @@
+download_status:
+  add_uri: "\u6DFB\u52A0\u7F51\u5740"
+  ques: "\u4E0B\u8F7D\u72B6\u6001"
+  type_uri: "\u8F93\u5165\u7F51\u5740"
 global_set:
   as_no: "\u5426"
   as_yes: "\u662F"
@@ -5,6 +9,7 @@ global_set:
   exit: "\u786E\u8BA4\u4EE5\u9000\u51FA"
   ques: "\u9009\u62E9\u4E00\u4E2A\u9009\u9879\u4EE5\u7EE7\u7EED\uFF1F"
 intro:
+  download: Download
   exit: "\u9000\u51FA"
   search: "\u641C\u7D22"
   setting: "\u8BBE\u7F6E"
