@@ -1,6 +1,6 @@
 from aiohttp import ClientSession
 from Remilia.lite.LiteResource import File
-from Remilia.lite.LiteFunctions import typedet
+from Remilia.lite.utils import typedet
 from json import loads,dumps
 from lxml.html import fromstring
 from base64 import b64encode

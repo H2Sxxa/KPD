@@ -1,14 +1,12 @@
 import asyncio
 from shutil import rmtree
 from Remilia.lite.LiteLog import Logger,DefaultStyle,PrinterStyle,Fore
-from Remilia.utils.cli.async_app import MakeAsync
 from Remilia.lite.v2.DictoryTreeBuilder import DictroyTree,Node
 
 from libs.base import event
 from libs.execute import impl, tui
 from libs.yml.app import App_Setting
 
-MakeAsync()
 
 if App_Setting.clean_cache:
     rmtree("Data/cache")

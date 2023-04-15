@@ -1,10 +1,11 @@
 from abc import ABC,abstractmethod
 from asyncio import AbstractEventLoop
 from typing import Union
-from Remilia.utils.cli.prompts import DT,RT
+from Remilia.utils.cli import prompts
 from Remilia.lite.LiteLog import Logger
 
-
+DT=prompts._base.DT
+RT=prompts._base.RT
 
 class TUI_Builder:
     def __init__(self,loop:AbstractEventLoop,logger:Logger) -> None:
@@ -19,5 +20,5 @@ class TUI_Builder:
             
 class Form(ABC):
     @abstractmethod
-    async def do_render(self,builder:TUI_Builder) -> Union[DT, RT]:pass
+    async def do_render(self,builder:TUI_Builder) -> Union[DT,RT]:pass
     def form_name(self) -> str:return self.__class__.__name__

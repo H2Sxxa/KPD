@@ -33,7 +33,7 @@ class YoN(Form):
                 ChoiceBuilder.fromdata(I18n_Setting.global_set.as_yes,True),
                 ChoiceBuilder.fromdata(I18n_Setting.global_set.as_no,False)
             ]
-        ).prompt()
+        ).prompt_async()
         return ce.data
 NRTU=YoN("NOT READY TO USE")
 class Intro(Form):
@@ -45,7 +45,7 @@ class Intro(Form):
                 ChoiceBuilder.fromdata(I18n_Setting.intro.setting,Setting(self)),
                 ChoiceBuilder.fromdata(I18n_Setting.intro.exit,Exit(self)),
             ]
-        ).prompt()
+        ).prompt_async()
         return await builder.render(ce.data)
 
 class Search(CanBackForm):
@@ -64,7 +64,7 @@ class Search(CanBackForm):
                 ChoiceBuilder.fromdata(I18n_Setting.search.regex_search+I18n_Setting.search.from_clip,RegexSearch(self,creators_dict,True)),
                 ChoiceBuilder.fromdata(I18n_Setting.global_set.backto,self.backto)
             ]
-        ).prompt()
+        ).prompt_async()
         return await builder.render(ce.data)
 class Creator(CanBackForm):
     def __init__(self, backto: Form,result:list) -> None:
@@ -78,7 +78,7 @@ class Creator(CanBackForm):
         ce=await prompts.ListPrompt(
             question=I18n_Setting.global_set.ques,
             choices=ChoiceBuilder.fromlist(await kc.fetch_content(url),lambda x:list(x.keys())[0],lambda x:list(x.values())[0])
-        ).prompt()
+        ).prompt_async()
         builder.logger.info(await kc.get_creator_work(url,ce.data))
         return await super().do_render(builder)
     
@@ -92,7 +92,7 @@ class Result(CanBackForm):
         ce=await prompts.ListPrompt(
             question=I18n_Setting.global_set.ques,
             choices=lc
-        ).prompt()
+        ).prompt_async()
         return await builder.render(ce.data)
 
 class PlainSearch(SearchForm):
@@ -104,7 +104,7 @@ class PlainSearch(SearchForm):
         else:
             keyword=await prompts.InputPrompt(
                 question=I18n_Setting.search.ques
-                ).prompt()
+                ).prompt_async()
             
         
         for creator in self.refer:
@@ -124,7 +124,7 @@ class RegexSearch(SearchForm):
         else:
             keyword=await prompts.InputPrompt(
                 question=I18n_Setting.search.ques
-                ).prompt()
+                ).prompt_async()
             
         for creator in self.refer:
             if re.search(keyword,creator["name"]):
@@ -143,7 +143,7 @@ class Setting(CanBackForm):
                 ChoiceBuilder.fromdata(I18n_Setting.setting.language,Lanugage(self)),
                 ChoiceBuilder.fromdata(I18n_Setting.global_set.backto,self.backto)
             ]
-        ).prompt()
+        ).prompt_async()
         return await builder.render(ce.data)
 
 class Lanugage(CanBackForm):
@@ -151,7 +151,7 @@ class Lanugage(CanBackForm):
         ce=await prompts.ListPrompt(
             question=I18n_Setting.global_set.ques,
             choices=ChoiceBuilder.fromlist(listdir(getPath("i18n")))
-        ).prompt()
+        ).prompt_async()
         App_Setting.language._modify("lang",ce.data)
         App_Conf._push(App_Setting)
         return await builder.render(self.backto)
