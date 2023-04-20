@@ -5,11 +5,11 @@ from json import loads,dumps
 from lxml.html import fromstring
 from base64 import b64encode
 
-from ..yml.app import getCache
+from ..yml.app import App_Setting, getCache
 from ..utils.instance import getLogger
 
 class KemonoClient:
-    root = "https://kemono.party"
+    root = App_Setting.root_site
     endpoint = root + "/api"
 
     fanbox = root + "/fanbox/user/"
@@ -25,7 +25,7 @@ class KemonoClient:
         return root+"/post/"+wid
     async def get_creator(self,service,cid):
         return getattr(self,service)+cid
-    
+
     async def fetch_content(self,url):
         contents=File(getCache("content/%s.json"%b64encode(url.encode('utf-8')).decode('utf-8')))
         

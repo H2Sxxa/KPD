@@ -7,6 +7,9 @@ aria:
   port: '6800'
   secret: ''
   timeout: 60.0
-clean_cache: false
+clean_cache: true
+glow:
+  glow_path: ./Data/binary/glow
 lang: zh_cn.yml
 sort_creator: false
+

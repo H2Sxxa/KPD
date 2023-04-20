@@ -15,6 +15,7 @@ App_Conf=ConfigManager.Config(ConfigManager.ConfigSetting(model=ConfigManager.Ya
 class App_Setting:
     clean_cache=False
     sort_creator=True
+    root_site="https://kemono.party"
     lang="en_us.yml"
     @ConfigManager.Cate()
     class aria:
