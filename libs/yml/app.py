@@ -14,7 +14,6 @@ App_Conf=ConfigManager.Config(ConfigManager.ConfigSetting(model=ConfigManager.Ya
 @App_Conf
 class App_Setting:
     clean_cache=False
-    max_cotents=10
     sort_creator=True
     lang="en_us.yml"
     @ConfigManager.Cate()
@@ -25,7 +24,11 @@ class App_Setting:
         port="6800"
         secret=""
         timeout=60.0
-
+    
+    @ConfigManager.Cate()
+    class glow:
+        glow_path="./Data/binary/glow"
+        
 I18n_Conf=ConfigManager.Config(ConfigManager.ConfigSetting(model=ConfigManager.YamlFile,path=geti18n(App_Setting.lang),regenerate=True))
 @I18n_Conf
 class I18n_Setting:

@@ -9,5 +9,4 @@ aria:
   timeout: 60.0
 clean_cache: false
 lang: zh_cn.yml
-max_cotents: 10
 sort_creator: false
