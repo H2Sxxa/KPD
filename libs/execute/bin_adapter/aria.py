@@ -4,9 +4,12 @@ import subprocess,threading
 from Remilia.lite.v2.InstanceManager import to_global
 from Remilia.lite.LiteLog import Logger
 from ...yml.app import App_Setting
-from ...base.const import ARIA2P_NAME
+from ...base.const import ARIA2P_NAME,ARIA_PROCESS
 
 class AriaAdapter:
+    
+    thread:threading.Thread
+    
     def __init__(self,logger:Logger) -> None:
         self.logger=logger
         self.host=App_Setting.aria.host
@@ -17,7 +20,9 @@ class AriaAdapter:
     @staticmethod
     def __lock_thread(boost_args):
         with open(App_Setting.aria.log_path,"w") as logout:
-            subprocess.Popen(boost_args,stderr=logout,stdout=logout).wait()
+            popen=subprocess.Popen(boost_args,stderr=logout,stdout=logout)
+            to_global(ARIA_PROCESS,popen)
+            popen.wait()
             
     async def init_adapter(self):
         await self.launch_client()
@@ -27,8 +32,12 @@ class AriaAdapter:
     async def launch_client(self):
         self.logger.info("init AriaAdapter")
         self.logger.info(App_Setting.aria.args)
-        threading.Thread(target=self.__lock_thread,args=(App_Setting.aria.args,)).start()
+        self.thread=threading.Thread(target=self.__lock_thread,args=(App_Setting.aria.args,))
+        self.thread.start()
         return self
+    
+    async def stop_thread(self):
+        pass
     
     async def refresh_api(self):
         self.logger.info("refresh aria API")

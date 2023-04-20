@@ -1,14 +1,13 @@
-from abc import abstractmethod
 import re,pyperclip
 from typing import List, Union
-from os import listdir,_exit
+from os import listdir
 from Remilia.utils.cli import prompts
 from Remilia.base.files import File
-from colorama import Fore
 
 from .tui import Form,TUI_Builder,DT,RT
 from ..apis.kemono import KemonoClient
 from ..utils.instance import getAriaAPI
+from ..utils import handle_exit
 from ..utils.builder import ChoiceBuilder
 from ..yml.app import I18n_Setting,getPath,App_Setting,App_Conf,I18n_Conf,geti18n
 
@@ -247,6 +246,6 @@ class BoolSetting(ALTCForm):
 class Exit(CanBackForm):
     async def do_render(self, builder: TUI_Builder) -> Union[DT, RT]:
         if await builder.render(YoN(I18n_Setting.global_set.exit)):
-            _exit(0)
+            handle_exit()
         else:
             return await builder.render(self.backto)
