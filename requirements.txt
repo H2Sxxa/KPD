@@ -1,4 +1,4 @@
-Remilia==1.1.3
+Remilia==1.1.5
 aria2p[tui]
 noneprompt
 aiohttp
