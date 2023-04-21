@@ -8,8 +8,8 @@ from .tui import Form,TUI_Builder,DT,RT
 from ..apis.kemono import KemonoClient
 from ..utils.instance import getAriaAPI
 from ..utils import handle_exit
-from ..utils.builder import ChoiceBuilder
-from ..yml.app import I18n_Setting,getPath,App_Setting,App_Conf,I18n_Conf,geti18n
+from ..utils.builder import ChoiceBuilder, MarkDownBuilder
+from ..yml.app import I18n_Setting,getPath,App_Setting,App_Conf,I18n_Conf,geti18n,getOut
 
 class CanBackForm(Form):
     def __init__(self,backto:Form) -> None:
@@ -51,11 +51,11 @@ class YoN(Form):
         super().__init__()
         self.ques=ques
     async def do_render(self,_:TUI_Builder) -> Union[DT, RT]:
-        '''
-        cp=await prompts.ConfirmPrompt(
+        if App_Setting.use_alt_ques:
+            return await prompts.ConfirmPrompt(
             question=self.ques,
-        ).prompt()
-        '''
+        ).prompt_async()
+
         ce=await prompts.ListPrompt(
             question=self.ques,
             choices=[
@@ -118,19 +118,26 @@ class TypeUri(CanBackForm):
             builder.logger.error(e)
         return await builder.render(DownloadStatus(self.backto))
 class Content(CanBackForm):
-    def __init__(self, backto: Form,url:str) -> None:
+    def __init__(self, backto: Form,url:str,name="") -> None:
         super().__init__(backto)
         self.url=url
+        self.name=name
     async def getChoices(self):
-        
-        
-        return
+        res=[]
+        res.append(ChoiceBuilder.fromdata(I18n_Setting.content.printit,lambda text:print(text)))
+        res.append(ChoiceBuilder.fromdata(I18n_Setting.content.glow_open,lambda _:None))
+        return res
     async def do_render(self, builder: TUI_Builder) -> Union[DT, RT]:
-        ce=prompts.ListPrompt(
+        kc=KemonoClient()
+        ce=await prompts.ListPrompt(
             question=I18n_Setting.global_set.ques,
             choices=await self.getChoices()
-        )
-        return await super().do_render(builder)
+        ).prompt_async()
+        pct=await kc.get_pagecontent(self.url)
+        md=await MarkDownBuilder(pct).getText()
+        File(getOut(f"{self.name}.md")).write("w",md)
+        ce.data(md)
+        return await builder.render(self.backto)
 
 class Creator(CanBackForm):
     def __init__(self, backto: Form,result:list) -> None:
@@ -143,21 +150,18 @@ class Creator(CanBackForm):
         url=await kc.get_creator(self.result["service"],self.result["id"])
         ce=await prompts.ListPrompt(
             question=I18n_Setting.global_set.ques,
-            choices=ChoiceBuilder.fromlist(await kc.fetch_content(url),lambda x:list(x.keys())[0],lambda x:list(x.values())[0])
+            choices=ChoiceBuilder.fromlist(await kc.fetch_content(url),lambda x:list(x.keys())[0],lambda x:list(x.values())[0]) + [ChoiceBuilder.fromdata(I18n_Setting.global_set.backto,self.backto),]
         ).prompt_async()
-        builder.logger.info(await kc.get_creator_work(url,ce.data))
-        return await super().do_render(builder)
+        return await builder.render(Content(self,await kc.get_creator_work(url,ce.data),ce.name))
     
 class Result(CanBackForm):
     def __init__(self, backto: Form,result:list) -> None:
         super().__init__(backto)
         self.result=result
     async def do_render(self, builder: TUI_Builder) -> Union[DT, RT]:
-        lc=ChoiceBuilder.fromlist(self.result,name_warp=lambda x:"%s %s" % (x["name"],x["service"]),data_warp=lambda x:Creator(self,x))
-        lc.append(ChoiceBuilder.fromdata(I18n_Setting.global_set.backto,self.backto))
         ce=await prompts.ListPrompt(
             question=I18n_Setting.global_set.ques,
-            choices=lc
+            choices=ChoiceBuilder.fromlist(self.result,name_warp=lambda x:"%s %s" % (x["name"],x["service"]),data_warp=lambda x:Creator(self,x)) + [ChoiceBuilder.fromdata(I18n_Setting.global_set.backto,self.backto),]
         ).prompt_async()
         return await builder.render(ce.data)
 

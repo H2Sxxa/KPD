@@ -1,3 +1,6 @@
+content:
+  glow_open: Open with glow
+  printit: Print it
 download_status:
   add_uri: Add Uri
   ques: Download Status
@@ -13,6 +16,12 @@ intro:
   exit: Exit
   search: Search
   setting: Setting
+markdown_generator:
+  comments: Comments
+  content: Content
+  downloads: Downloads
+  files: Files
+  img_alt: Image Here
 search:
   from_clip: (clip)
   plain_search: Plain Search

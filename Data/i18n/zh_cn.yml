@@ -1,3 +1,6 @@
+content:
+  glow_open: "\u4F7F\u7528Glow\u6253\u5F00"
+  printit: "\u6253\u5370"
 download_status:
   add_uri: "\u6DFB\u52A0\u7F51\u5740"
   ques: "\u4E0B\u8F7D\u72B6\u6001"
@@ -9,10 +12,16 @@ global_set:
   exit: "\u786E\u8BA4\u4EE5\u9000\u51FA"
   ques: "\u9009\u62E9\u4E00\u4E2A\u9009\u9879\u4EE5\u7EE7\u7EED\uFF1F"
 intro:
-  download: Download
+  download: "\u4E0B\u8F7D"
   exit: "\u9000\u51FA"
   search: "\u641C\u7D22"
   setting: "\u8BBE\u7F6E"
+markdown_generator:
+  comments: "\u8BC4\u8BBA"
+  content: "\u5185\u5BB9"
+  downloads: "\u4E0B\u8F7D"
+  files: "\u56FE\u7247"
+  img_alt: "\u6B64\u5904\u5E94\u6709\u56FE\u7247"
 search:
   from_clip: "(\u526A\u8D34\u677F)"
   plain_search: "\u666E\u901A\u641C\u7D22"

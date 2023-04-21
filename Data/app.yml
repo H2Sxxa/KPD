@@ -7,9 +7,26 @@ aria:
   port: '6800'
   secret: ''
   timeout: 60.0
-clean_cache: true
+clean_cache: false
+content_include:
+- downloads
+- contents
+- files
+- comments
+generator:
+  content_include:
+  - downloads
+  - contents
+  - files
+  - comments
+  thumb_img: false
 glow:
   glow_path: ./Data/binary/glow
-lang: zh_cn.yml
+lang: en_us.yml
+log_level: 5
+proxy:
+  http_proxy: http://127.0.0.1:7890
+  open_proxy: false
+root_site: https://kemono.party
 sort_creator: false
-
+use_alt_ques: false
