@@ -24,16 +24,16 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+        pip install pyinstaller
         
-    - name: Package Application
-      uses: JackMcKew/pyinstaller-action-windows@main
-      with:
-        path: .
+    - name: run Build
+      run: |
+        pyinstaller -F main.py
 
     - uses: actions/upload-artifact@v3.1.2
       with:
         name: name-of-artifact
-        path: ./dist/windows
+        path: dist/*
         
   build-support:
     runs-on: ubuntu-latest
@@ -49,12 +49,11 @@ jobs:
         python -m pip install --upgrade pip
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
         
-    - name: Package Application
-      uses: JackMcKew/pyinstaller-action-windows@main
-      with:
-        path: .
+    - name: run Build
+      run: |
+        pyinstaller -F main.py
 
     - uses: actions/upload-artifact@v3.1.2
       with:
         name: name-of-artifact
-        path: ./dist/windows
+        path: dist/*
