@@ -12,14 +12,6 @@ from libs.utils import generate_lines
 from libs.yml.app import App_Conf, App_Setting
 
 sys.excepthook=lambda exception,name,tb,*args:generate_lines(*traceback.format_exception(exception,name,tb),*args)
-
-if App_Setting.clean_cache:
-    rmtree("Data/cache")
-
-if App_Setting.proxy.open_proxy:
-    os.environ["http_proxy"]=App_Setting.proxy.http_proxy
-    os.environ["https_proxy"]=App_Setting.proxy.http_proxy
-
 @DictroyTree
 class Data:
     @Node
@@ -34,6 +26,13 @@ class Data:
         class content:pass
     @Node
     class out:pass
+    
+if App_Setting.clean_cache:
+    rmtree("Data/cache")
+
+if App_Setting.proxy.open_proxy:
+    os.environ["http_proxy"]=App_Setting.proxy.http_proxy
+    os.environ["https_proxy"]=App_Setting.proxy.http_proxy
 
 @event.TriggerEvent(event.BoostEvent)
 async def main(loop:asyncio.AbstractEventLoop,logger:Logger):

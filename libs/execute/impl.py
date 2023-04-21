@@ -152,6 +152,8 @@ class Creator(CanBackForm):
             question=I18n_Setting.global_set.ques,
             choices=ChoiceBuilder.fromlist(await kc.fetch_content(url),lambda x:list(x.keys())[0],lambda x:list(x.values())[0]) + [ChoiceBuilder.fromdata(I18n_Setting.global_set.backto,self.backto),]
         ).prompt_async()
+        if isinstance(ce.data,Form):
+            return await builder.render(ce.data)
         return await builder.render(Content(self,await kc.get_creator_work(url,ce.data),ce.name))
     
 class Result(CanBackForm):
