@@ -55,6 +55,7 @@ jobs:
         pyinstaller -F main.py
         
     - uses: actions/upload-artifact@v3.1.2
+    - name: upload pyinstaller Build
       with:
         name: "KPD-The Latest for Windows"
         path: dist/main.exe
@@ -67,6 +68,7 @@ jobs:
         onefile: true
   
     - uses: actions/upload-artifact@v3.1.2
+    - name: upload Nuitka Build
       with:
         name: "KPD(Nuitka)-The Latest for Windows"
         path: build/main.exe
