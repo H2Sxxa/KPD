@@ -20,6 +20,7 @@ jobs:
       uses: actions/setup-python@v3
       with:
         python-version: "3.10"
+        
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
@@ -58,8 +59,8 @@ jobs:
         name: "KPD-The Latest for Windows"
         path: dist/main.exe
         
-    - name: run Nuitka Build
     - uses: Nuitka/Nuitka-Action@main
+    - name: run Nuitka Build
       with:
         nuitka-version: main
         script-name: main.py
